@@ -33,14 +33,42 @@ class Node {
 		}
 	}
 
-	swapWithParent() {
-		if (this.parent) {
-			// var temp;
-			// this.temp = this.parent;
-			// this.parent = this;
-			// this = this.temp;
+		swapWithParent() {
+			if (this.parent) {
+				var granddad = this.parent.parent;
+				var dad = this.parent;
+				var node;
+				var leftSon = this.left;
+				var rightSon = this.right;
+	
+				if (granddad) {
+					if (this.parent === granddad.left) {
+						granddad.left = this;
+					} else if (this.parent === granddad.right) {
+						granddad.right = this;
+					}
+				}
+	
+				if (this === dad.left){
+					node = this.parent.right;
+					this.right = node;
+					this.left = dad;
+				} else if (this === dad.right){
+					node = this.parent.left;
+					this.left = node;
+					this.right = dad;
+				}
+	
+				this.parent = granddad;
+	
+				if (node) { node.parent = this };
+				dad.parent = this;
+				dad.left = leftSon;
+				dad.right = rightSon;
+				if (leftSon) { leftSon.parent = dad };
+				if (rightSon) { rightSon.parent = dad };
+			}
 		}
 	}
-}
 
 module.exports = Node;
